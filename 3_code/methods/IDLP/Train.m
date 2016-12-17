@@ -1,4 +1,5 @@
-function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_train, matrix_folds_cell_train,initialMatrix_cell)
+function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_train, ...,
+                                    matrix_folds_cell_train,initialMatrix_cell,fold_idx)
    % cv_train_parameter_cell = {best_parameter_array; matrix_cv_split_idx; fold_num; 
    %                              distinct_parameter_num; evaluation_index_num};
    %matrix_cell_train = {gene_phenotype_matrix_old; phenotype_similarity_matrix; ppi_matrix; 
@@ -16,6 +17,7 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
    gene_phenotype_matrix_old = matrix_folds_cell_train{1,1};
    phenotype_similarity_matrix = matrix_cell_train{2,1};
    ppi_matrix = matrix_cell_train{3,1};
+   Y_prince_folds_cell = matrix_cell_train{7,1};
    %ncbi_gene_id = matrix_cell_train{4,1};
    %phenotype_id = matrix_cell_train{5,1};
    
@@ -28,14 +30,10 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
    
    Y = initialMatrix_cell{1,1};
    [all_gene_num, all_phenotype_num] = size(Y);
-   Y_temp = zeros(size(Y));
-    for i = 1 : all_gene_num
-        tmp = repmat(gene_phenotype_matrix_old(i,:),all_phenotype_num,1);
-        temp2 = tmp.*phenotype_similarity_matrix;
-        Y_temp(i,:) = max(temp2,[],2)';
-    end
-   %Y_hat = matrix_folds_cell_train{1,1};
-   Y_hat = Y_temp; 
+   Y_hat_prince = Y_prince_folds_cell{1,fold_idx};   
+   Y_0 = gene_phenotype_matrix_old;
+   Y_hat = (Y_0+Y_hat_prince)/2;
+   
    for i = 1:max_ite
        S1 = S1_hat + gamma*Y*Y';
        A = (eye(all_gene_num)-alpha*S1);

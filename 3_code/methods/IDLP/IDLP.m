@@ -18,7 +18,7 @@ gamma_set = [1000];%0.0001,10000
 alphaPrime_set = [0.1];%0.1,0.5
 %betaPrime_set = 1 - alpha_prime;
 gammaPrime_set = [1000];%0.0001,10000
-fold_num = 3;
+fold_num = 5;
 distinct_parameter_num = 4;
 index_cell = {'AUC50';'AUC100';'AUC300'; 'AUC500';'AUC1000';'AUCALL'}; 
 cv_criteria = 'AUC50';
@@ -33,12 +33,22 @@ max_ite = 20;
 input_parameter_cell = {alpha_set; gamma_set; alphaPrime_set; gammaPrime_set; ...,
     distinct_parameter_num; fold_num; index_cell; cv_criteria; matrix_cv_split_idx; max_ite};
 matrix_cell_test = {gene_phenotype_matrix_newAdded};
-matrix_split_input_cell = matrix_cell_train(matrix_cv_split_idx,1);
+matrix_split_input_cell = {gene_phenotype_matrix_old};
 [ matrix_split_output_cell ] = SplitData( matrix_split_input_cell,fold_num );
-Get_Y_prince_folds(matrix_split_output_cell, phenotype_similarity_matrix);
-matrix_mergeFolds_cell_train = MergeData(matrix_split_output_cell,1); 
+filename = ['Y_prince_cell_' num2str(fold_num) 'folds.mat'];
+if exist(filename,'file')
+    load(filename,'Y_prince_folds_cell');
+else
+    
+    Y_prince_folds_cell = Get_Y_prince_folds(matrix_split_output_cell, phenotype_similarity_matrix);
+    %Y_hat = Initialize_Y_prince(gene_phenotype_matrix, phenotype_similarity_matrix);
+    Y_prince_folds_cell{1,fold_num+1}= Get_Y_prince_allFolds( gene_phenotype_matrix_old, phenotype_similarity_matrix );
+    save(filename,'Y_prince_folds_cell');
+end
+
+%matrix_mergeFolds_cell_train = MergeData(matrix_split_output_cell,1); 
 matrix_cell_train = {gene_phenotype_matrix_old; phenotype_similarity_matrix; ppi_matrix; ncbi_gene_id; phenotype_id;...,
-                    matrix_split_output_cell};
+                    matrix_split_output_cell;Y_prince_folds_cell};
 %%%%%%%%%%%%%%%%%%%% prepare data cell %%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%% initialize matrix with random value %%%%%%%%%%%%%%%  
