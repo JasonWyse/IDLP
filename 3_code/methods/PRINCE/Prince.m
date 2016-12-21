@@ -21,13 +21,13 @@ for i = 1 : all_gene_num
     Y_temp(i,:) = max(temp2,[],2)';
 
 end
-save('Y.mat','Y_temp');
-load('Y.mat','Y_temp');
+%save('Y.mat','Y_temp');
+%load('Y.mat','Y_temp');
 %-----load is equal to above lines
 
-%Y = 1./(1+exp((-15*Y_temp)+log(9999)));
-alpha = 0.9;
-Y = Y_temp;
+Y = 1./(1+exp((-15*Y_temp)+log(9999)));
+alpha = 0.5;
+%Y = Y_temp;
 F_before = Y;
 for step = 1:20
   F_now = alpha * S * F_before + (1-alpha) * Y; 

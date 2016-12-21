@@ -2,11 +2,12 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
     %cv_train_parameter_cell = {alpha; max_ites;indistct_num;length(indice_set)};
     %matrix_cell_train = {gene_phenotype_matrix_old;phenotype_similarity_matrix;ppi_matrix;ncbi_gene_id;phenotype_id};
     %matrix_cell_totrain = MergeData(matrix_split_output_cell,i);
-    lambda = cv_train_parameter_cell{1,1};
-    eta = cv_train_parameter_cell{2,1};
-    gamma = cv_train_parameter_cell{3,1};
 
-    max_ites = cv_train_parameter_cell{4,1};
+    lambda = cv_train_parameter_cell{1,1}(1,1);
+    eta = cv_train_parameter_cell{1,1}(2,1);
+    gamma = cv_train_parameter_cell{1,1}(3,1);
+
+    max_ites = cv_train_parameter_cell{2,1};
     
     gene_phenotype_matrix_old = matrix_cell_totrain{1,1};
     phenotype_similarity_matrix = matrix_cell_train{2,1};
@@ -59,8 +60,11 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
 
     M = [M_G,M_GP;M_PG,M_P];
     [B,I] = sort(phenotype_similarity_matrix,1,'descend');
+    
+    array = 1./sum(gene_phenotype_matrix_old);
+    array(isinf(array)) = 0;
+    U0_matrix = gene_phenotype_matrix_old* diag(array);
 
-    U0_matrix = gene_phenotype_matrix_old* diag(1./sum(gene_phenotype_matrix_old));
     V0_matrix = zeros(size(M_P));
     tmpI = (I(2:6,:));
     [r,c] = size(tmpI);

@@ -1,4 +1,4 @@
-function [matrix_split_output_cell] = SplitData( matrix_split_input_cell,fold_num )
+function [matrix_split_output_cell] = SplitData_liu( matrix_split_input_cell,fold_num )
 %split matrix in fold_num pieces
     matrix_split_output_cell = cell(size(matrix_split_input_cell,1),fold_num);
     for j = 1:size(matrix_split_input_cell,1)

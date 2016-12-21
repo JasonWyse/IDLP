@@ -25,7 +25,7 @@ for j = 1 : rows     %j: iterate phenotype
     ROCn(j,3) = ROC(topn(j,:), 300);
     ROCn(j,4) = ROC(topn(j,:), 500);
     ROCn(j,5) = ROC(topn(j,:), 1000);
-    ROCn(j,6) = ROC(topn(j,:), 3261);
+    ROCn(j,6) = ROC(topn(j,:), cols);
 end
 avgROC = mean(ROCn);
 

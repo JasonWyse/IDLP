@@ -54,24 +54,21 @@ matrix_cell_test = {gene_phenotype_matrix_newAdded};
 %%%%%%%%%%%%%%%%%%%% prepare data cell %%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%% learning process %%%%%%%%%%%%%%%%%%%%%%
-% learning process, using cross-validation to get the best parameter for the methods
+% we use the prince seed disease genes initialization as the predicted
+% results
+%%%%%%%%%%%%%%%%%%%% learning process %%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%% test process %%%%%%%%%%%%%%%%%%%%%%
 tic;
-[learned_matrix_cell,best_parameter_array,evaluation_parameter_result] = Learn(input_parameter_cell, matrix_cell_train);
+    learned_matrix_cell = Y_hat_folds_cell(1,fold_num+1);
+    evaluation_index_num = length(evaluation_indice_set);
+    evaluation_test = Test(matrix_cell_test,learned_matrix_cell,evaluation_index_num);
 toc;
 result_file_dir = pwd; %get current directory full name 
 %learn_result_cell = {learned_matrix_cell; best_parameter_array; evaluation_parameter_result};
 file_key_word = file_date_time;
 result_file_name = [result_file_dir '/' 'result' '_' file_key_word '_' datestr(now,30) '.mat' ];  
-save(result_file_name, 'learned_matrix_cell', 'best_parameter_array', 'evaluation_parameter_result',...,
-    'max_ites');
-%save('result_logic.mat','learned_matrix_cell','best_parameter_array');
-%%%%%%%%%%%%%%%%%%%% learning process %%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%% test process %%%%%%%%%%%%%%%%%%%%%%
-tic;
-    evaluation_index_num = length(evaluation_indice_set);
-    evaluation_test = Test(matrix_cell_test,learned_matrix_cell,evaluation_index_num);
-toc;
-save(result_file_name, 'evaluation_test','-append');
+save(result_file_name, 'evaluation_test');
 %save('result_logic.mat', 'evaluation_test','-append');
 %%%%%%%%%%%%%%%%%%%% test process %%%%%%%%%%%%%%%%%%%%%%
