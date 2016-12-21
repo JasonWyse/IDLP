@@ -22,8 +22,10 @@ function [learned_matrix_cell, best_parameter_array, evaluation_parameter_result
     i = 1;
     for alpha = alpha_set
         for gamma = gamma_set
-            for alphaPrime = alphaPrime_set
-                for gammaPrime = gammaPrime_set                    
+%             for alphaPrime = alphaPrime_set
+%                 for gammaPrime = gammaPrime_set    
+                    alphaPrime = alpha;
+                    gammaPrime = gamma;
                     cv_train_parameter_cell = {[alpha; gamma; alphaPrime; gammaPrime]; evaluation_index_num;...,
                         max_ite; matrix_cv_split_idx;...,
                         fold_num; distinct_parameter_num};
@@ -32,8 +34,8 @@ function [learned_matrix_cell, best_parameter_array, evaluation_parameter_result
                     evaluation_parameter_result(1:end-distinct_parameter_num,i) = tmp;
                     evaluation_parameter_result(end - distinct_parameter_num+1:end,i) = [alpha, gamma, alphaPrime, gammaPrime];
                     i = i+1;
-                end
-            end
+%                 end
+%             end
         end
     end        
     best_parameter_array = Get_best_parameter(evaluation_parameter_result,distinct_parameter_num,cv_criteria);       
@@ -50,7 +52,8 @@ function [learned_matrix_cell, best_parameter_array, evaluation_parameter_result
     best_initialMatrix_cell = initialMatrice_cells(:,best_initialMatrixCell_idx);
     matrix_allFold_cell_train = matrix_cell_train(matrix_cv_split_idx,1);
 %    file_name = [method_data_dir initial_matrixFileName_cell{i,1}];load(file_name);initial_matrix_cell = {W;H1;H2};
-    [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_train, matrix_allFold_cell_train,best_initialMatrix_cell);  
+    fold_idx = fold_num+1;%0: it means all folds;
+    [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_train, matrix_allFold_cell_train,best_initialMatrix_cell,fold_idx);  
   
 end
 
@@ -64,8 +67,9 @@ function  [evaluation_result_average,evaluation_initialMatrice_result] = CrossVa
     %max_ite = cv_train_parameter_cell{end-4+1,1};
     evaluation_index_num = cv_train_parameter_cell{end-5+1,1};
     
-    matrix_split_input_cell = matrix_cell_train(matrix_cv_split_idx,1);%if we need multiple matrix to be split, like:1-th and 3-th matrix,then matrix_cell_train([1,3],1)
-    matrix_split_output_cell = SplitData(matrix_split_input_cell,fold_num);
+    %matrix_split_input_cell = matrix_cell_train(matrix_cv_split_idx,1);%if we need multiple matrix to be split, like:1-th and 3-th matrix,then matrix_cell_train([1,3],1)
+    %matrix_split_output_cell = SplitData(matrix_split_input_cell,fold_num);
+    matrix_split_output_cell = matrix_cell_train{6,1};
     %given a fixed parameters, return the average result of ten times' different initial matrix values     
     [~,initialMatrixCell_num] = size(initialMatrice_cells);
     evaluation_initialMatrice_result = zeros(evaluation_index_num, initialMatrixCell_num);
@@ -76,7 +80,7 @@ function  [evaluation_result_average,evaluation_initialMatrice_result] = CrossVa
         for j=1:fold_num
             matrix_oneFold_cell_validate = matrix_split_output_cell(:,j);
             matrix_mergeFolds_cell_train = MergeData(matrix_split_output_cell,j);   %delete the j-th fold data, merge the rest            
-            [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_train, matrix_mergeFolds_cell_train,initialMatrix_cell);    
+            [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_train, matrix_mergeFolds_cell_train,initialMatrix_cell,j);    
             evaluation_folds_result(:,j) = Evaluate(learned_matrix_cell, evaluation_index_num, matrix_oneFold_cell_validate);        
         end
         %each initial matrix file corresponding to an average evaluation result on all fold data 
