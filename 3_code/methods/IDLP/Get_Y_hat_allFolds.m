@@ -1,4 +1,4 @@
-function [ Y_hat ] = Get_Y_prince_allFolds( gene_phenotype_matrix, phenotype_similarity_matrix )
+function [ Y_hat ] = Get_Y_hat_allFolds( gene_phenotype_matrix, phenotype_similarity_matrix )
 %GET_Y_PRINCE_ALLFOLDS Summary of this function goes here
 %   Detailed explanation goes here
       

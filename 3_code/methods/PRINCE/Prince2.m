@@ -12,7 +12,7 @@ load(GP_file_name,'gene_phenotype_matrix_old', 'gene_phenotype_matrix_newAdded',
 
 
 %%%%%%%%%%%%%%%%%%%% input parameter assignment %%%%%%%%%%%%%%%
-alpha_set = [0.1];
+alpha_set = [0.1,0.3,0.5,0.7,0.9];
 indistct_parameter_num = 1;
 evaluation_indice_set = {'AUC20';'AUC50';'AUC100';'AUC300';'AUC500';'AUC1000';'AUCALL'};
 %index_cell = {'AUC50';'AUC100';'AUC300'; 'AUC500';'AUC1000';'AUCALL'};
@@ -38,9 +38,9 @@ else
     save(filename,'matrix_split_output_cell');
 end
 
-filename = 'Y_hat_folds_cell.mat';% seed disease genes don't change for each query disease, 
-                                  % it can be prepared in advance to
-                                  % shorten the execute time
+% seed disease genes don't change for each query disease, 
+% it can be prepared in advance to shorten the execute time
+filename = ['Y_hat_cell_' num2str(fold_num) 'folds.mat'];
 if exist(filename,'file')
     load('Y_hat_folds_cell.mat','Y_hat_folds_cell');
 else    
@@ -63,7 +63,7 @@ result_file_dir = pwd; %get current directory full name
 file_key_word = file_date_time;
 result_file_name = [result_file_dir '/' 'result' '_' file_key_word '_' datestr(now,30) '.mat' ];  
 save(result_file_name, 'learned_matrix_cell', 'best_parameter_array', 'evaluation_parameter_result',...,
-    'max_ites');
+    'max_ites','alpha_set','fold_num');
 %save('result_logic.mat','learned_matrix_cell','best_parameter_array');
 %%%%%%%%%%%%%%%%%%%% learning process %%%%%%%%%%%%%%%%%%%%%%
 

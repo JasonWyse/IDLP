@@ -12,12 +12,8 @@ clear B;
 topn = zeros(rows, cols);
 for j = 1 : rows     %j: iterate phenotype 
     for k = 1 : cols%就是把按顺序排的一行中预测对的置一，靠前的一越多越好
-	real_col = IX(j, k);
-<<<<<<< HEAD
-        if (HPG(j, real_col) > 0)
-=======
-        if (phenotype_gene_matrix_groundTruth(j, real_col) > 0)
->>>>>>> master
+        real_col = IX(j, k);
+        if phenotype_gene_matrix_groundTruth(j, real_col) > 0
             topn(j, k) = 1;%
         else
             topn(j, k) = 0;

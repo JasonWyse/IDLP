@@ -15,7 +15,6 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
     ncbi_gene_id = matrix_cell_train{4,1};
     phenotype_id = matrix_cell_train{5,1};
     
-    M_GP = zeros(size(gene_phenotype_matrix_old));
     temp_matrix = zeros(size(gene_phenotype_matrix_old));
     for i = 1:size(gene_phenotype_matrix_old,1)
        temp_matrix(i,:) = sum(gene_phenotype_matrix_old(i,:)); 
@@ -24,7 +23,6 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
     M_GP(isnan(M_GP)) = 0;
 
 
-    M_PG = zeros(size(gene_phenotype_matrix_old'));
     temp_matrix = zeros(size(gene_phenotype_matrix_old'));
     for i = 1:size(gene_phenotype_matrix_old,2)
        temp_matrix(i,:) = sum(gene_phenotype_matrix_old(:,i)); 
@@ -59,7 +57,7 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
     M_P(isnan(M_P)) = 0;
 
     M = [M_G,M_GP;M_PG,M_P];
-    [B,I] = sort(phenotype_similarity_matrix,1,'descend');
+    [~,I] = sort(phenotype_similarity_matrix,1,'descend');
     
     array = 1./sum(gene_phenotype_matrix_old);
     array(isinf(array)) = 0;
@@ -76,7 +74,7 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
     P0_matrix = [(1-eta)*U0_matrix;eta* V0_matrix];
     P_before = P0_matrix;
 
-    for step = 1 : 30
+    for step = 1 : max_ites
        P_now = (1-gamma)*M'*P_before + gamma*P0_matrix;   
        P_before = P_now;
     end

@@ -8,30 +8,17 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
     max_ites = cv_train_parameter_cell{2,1};
     
     gene_phenotype_matrix_old = matrix_cell_totrain{1,1};
-    phenotype_similarity_matrix = matrix_cell_train{2,1};
-    ppi_matrix = matrix_cell_train{3,1};
-    ncbi_gene_id = matrix_cell_train{4,1};
-    phenotype_id = matrix_cell_train{5,1};
+    phenotype_similarity_matrix_norm = matrix_cell_train{7,1};
+    ppi_matrix_norm = matrix_cell_train{8,1};
     
     
-   [all_gene_num,all_phenotype_num] = size(gene_phenotype_matrix_old);
+   [~,all_phenotype_num] = size(gene_phenotype_matrix_old);
     array = zeros(1,all_phenotype_num);
     array(1,1:end) = 1;
     p0 = diag(array);
-    
-%     array = 1./sum(gene_phenotype_matrix_old);
-%     array(isinf(array)) = 0;
-%     g0 = gene_phenotype_matrix_old* diag(array);
+ 
     g0 = zeros(size(gene_phenotype_matrix_old));
 
-
-    D = diag(sum(phenotype_similarity_matrix,2));
-    phenotype_similarity_matrix_norm = D^(-0.5) * phenotype_similarity_matrix * D^(-0.5);
-    
-    W = Disisolate_ppi(ppi_matrix);
-    D = diag(sum(W,2));
-    ppi_matrix_norm = D^(-0.5) * W * D^(-0.5);
-    
 
     P_before = p0;
     G_before = g0;
