@@ -5,7 +5,8 @@ path(path,'../../common_tool_function');
 
 %%%%%%%%%%%%%%%%%%%% load data file %%%%%%%%%%%%%%%%%%%%%%
 file_date_time = '2015_8&2016_12';
-GP_file_name = ['G_P_network_mappingkey13_' file_date_time '.mat'];
+ppi_key_word = 'changeppi_';
+GP_file_name = ['G_P_network_' ppi_key_word 'mappingkey13_' file_date_time '.mat'];
 load(GP_file_name,'gene_phenotype_matrix_old', 'gene_phenotype_matrix_newAdded', 'phenotype_similarity_matrix'...,
     ,'ncbi_gene_id','phenotype_id','ppi_matrix');
 %%%%%%%%%%%%%%%%%%%% load data file %%%%%%%%%%%%%%%%%%%%%%
@@ -67,7 +68,7 @@ toc;
 result_file_dir = pwd; %get current directory full name 
 %learn_result_cell = {learned_matrix_cell; best_parameter_array; evaluation_parameter_result};
 file_key_word = file_date_time;
-result_file_name = [result_file_dir '/' 'result' '_' file_key_word '_' datestr(now,30) '.mat' ];  
+result_file_name = [result_file_dir '/' 'result' '_' ppi_key_word file_key_word '_' datestr(now,30) '.mat' ];  
 
 save(result_file_name, 'evaluation_test');
 %save('result_logic.mat', 'evaluation_test','-append');

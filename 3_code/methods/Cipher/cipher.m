@@ -2,9 +2,10 @@ clear;
 
 path(path,'../../../2_useful_data');
 file_date_time = '2015_8&2016_12';
-GP_file_name = ['G_P_network_mappingkey13_' file_date_time '.mat'];
+key_word = 'exist_old_';
+GP_file_name = ['G_P_network_' key_word 'mappingkey13_' file_date_time '.mat'];
 
-method_str = 'dn';  %sp  dn
+method_str = 'sp';  %sp  dn
 evaluation_indice_set = {'AUC20';'AUC50';'AUC100';'AUC300';'AUC500';'AUC1000';'AUCALL'};
 load(GP_file_name,'gene_phenotype_matrix_old', 'gene_phenotype_matrix_newAdded', 'phenotype_similarity_matrix'...,
     ,'ncbi_gene_id','phenotype_id','ppi_matrix','gene_phenotype_matrix_new');
@@ -34,7 +35,7 @@ cROC = zeros(1,7);
 cROC(1,:) = avgROC;
 
 result_file_dir = pwd;
-result_file_name = [result_file_dir '/' 'result' '_' file_date_time '_' datestr(now,30) '_' method_str '_' '.mat' ];  
+result_file_name = [result_file_dir '/' 'result' '_' key_word file_date_time '_' datestr(now,30) '_' method_str '_' '.mat' ];  
 
 
 save (result_file_name,'gene_phenotype_score_matrix','cROC');

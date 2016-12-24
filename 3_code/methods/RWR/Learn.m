@@ -21,7 +21,6 @@ function [learned_matrix_cell, best_parameter_array, evaluation_result] = Learn(
         toc;
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%% cross-validation to choose best parameters  %%%%%%%%%%%%%%%%%%%%%%%%%%
-    save('evaluation_result.mat','evaluation_result');
     best_parameter_array = Get_best_parameter(evaluation_result,indistct_parameter_num,cv_criteria);
     cv_train_parameter_cell = {best_parameter_array; max_ites;indistct_parameter_num;evaluation_index_num};
     [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_train,fold_num+1);

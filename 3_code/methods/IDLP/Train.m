@@ -30,9 +30,8 @@ function [learned_matrix_cell] = Train(cv_train_parameter_cell, matrix_cell_trai
    
    Y = initialMatrix_cell{1,1};
    [all_gene_num, all_phenotype_num] = size(Y);
-   Y_hat = Y_prince_folds_cell{1,fold_idx}; 
-
-   Y_hat = 1./(1+exp((-15*Y_hat)+log(9999)));
+   Y_hat = Y_prince_folds_cell{1,fold_idx};
+   %Y_hat = 1./(1+exp((-15*Y_hat)+log(9999)));
    for i = 1:max_ite
        S1 = S1_hat + gamma*Y*Y';
        A = (eye(all_gene_num)-alpha*S1);

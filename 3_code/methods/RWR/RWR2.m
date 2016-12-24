@@ -3,7 +3,8 @@ clear;
 path(path,'../../../2_useful_data');
 path(path,'../../common_tool_function');
 file_date_time = '2015_8&2016_12';
-GP_file_name = ['G_P_network_mappingkey13_' file_date_time '.mat'];
+ppi_key_word = 'exist_old_';
+GP_file_name = ['G_P_network_' ppi_key_word 'mappingkey13_' file_date_time '.mat'];
 
 lambda_set = [0.1,0.3,0.5,0.7,0.9];
 indistct_parameter_num = 1;
@@ -55,7 +56,7 @@ toc;
 result_file_dir = pwd; %get current directory full name 
 %learn_result_cell = {learned_matrix_cell; best_parameter_array; evaluation_parameter_result};
 file_key_word = file_date_time;
-result_file_name = [result_file_dir '/' 'result' '_' file_key_word '_' datestr(now,30) '.mat' ];  
+result_file_name = [result_file_dir '/' 'result' '_' ppi_key_word file_key_word '_' datestr(now,30) '.mat' ];  
 save(result_file_name,'learned_matrix_cell','best_parameter_array','evaluation_parameter_result');
 tic;
     evaluation_index_num = length(evaluation_indice_set);

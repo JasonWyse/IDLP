@@ -12,12 +12,12 @@ load(GP_file_name,'gene_phenotype_matrix_old', 'gene_phenotype_matrix_newAdded',
 %%%%%%%%%%%%%%%%%%%% load data file %%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%% input parameter assignment %%%%%%%%%%%%%%%
-alpha_set = [0.3];
+mu_set = [1];
 %beta_set = 1 - alpha;
-gamma_set = [10000];%0.0001,10000
-alphaPrime_set = [0.3];%0.1,0.5
+nu_set = [1];%0.0001,10000
+zeta_set = [1];%0.1,0.5
 %betaPrime_set = 1 - alpha_prime;
-gammaPrime_set = [10000];%0.0001,10000
+eta_set = [1];%0.0001,10000
 fold_num = 5;
 distinct_parameter_num = 4;
 index_cell = {'AUC20';'AUC50';'AUC100';'AUC300'; 'AUC500';'AUC1000';'AUCALL'}; 
@@ -30,7 +30,7 @@ max_ite = 20;
 %%%%%%%%%%%%%%%%%%%% input parameter assignment %%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%% prepare data cell %%%%%%%%%%%%%%%%%%%
-input_parameter_cell = {alpha_set; gamma_set; alphaPrime_set; gammaPrime_set; ...,
+input_parameter_cell = {mu; nu; zeta_set; eta_set; ...,
     distinct_parameter_num; fold_num; index_cell; cv_criteria; matrix_cv_split_idx; max_ite};
 matrix_cell_test = {gene_phenotype_matrix_newAdded};
 matrix_split_input_cell = {gene_phenotype_matrix_old};
@@ -46,8 +46,7 @@ end
 filename = ['Y_hat_cell_' num2str(fold_num) 'folds.mat'];
 if exist(filename,'file')
     load(filename,'Y_hat_folds_cell');
-else
-    
+else    
     Y_hat_folds_cell = Get_Y_hat_folds(matrix_split_output_cell, phenotype_similarity_matrix);
     %Y_hat = Initialize_Y_prince(gene_phenotype_matrix, phenotype_similarity_matrix);
     Y_hat_folds_cell{1,fold_num+1}= Get_Y_hat_allFolds( gene_phenotype_matrix_old, phenotype_similarity_matrix );

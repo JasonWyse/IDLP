@@ -4,7 +4,8 @@ path(path,'../../../2_useful_data');
 path(path,'../../common_tool_function');
 file_date_time = '2015_8&2016_12';
 
-GP_file_name = ['G_P_network_mappingkey13_' file_date_time '.mat'];
+key_word = 'total_new_';
+GP_file_name = ['G_P_network_' key_word 'mappingkey13_' file_date_time '.mat'];
 alpha_set = [0.1,0.3,0.5,0.7,0.9];
 max_ites = 10;
 indice_set = {'AUC20';'AUC50';'AUC100';'AUC300';'AUC500';'AUC1000';'AUCALL'};
@@ -52,7 +53,7 @@ toc;
 
 result_file_dir = pwd; %get current directory full name 
 file_key_word = file_date_time;
-result_file_name = [result_file_dir '/' 'result' '_' file_key_word '_' datestr(now,30) '.mat' ];  
+result_file_name = [result_file_dir '/' 'result' '_' key_word file_key_word '_' datestr(now,30) '.mat' ];  
 
 save(result_file_name,'learned_matrix_cell','best_parameter_array','evaluation_result');
 tic;
